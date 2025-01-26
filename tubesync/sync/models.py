@@ -1290,12 +1290,7 @@ class Media(models.Model):
     @property
     def selected_path(self):
         if self.downloaded and self.media_file:
-            filename = self.media_file.path
-            for prefix in self.source.directory_path.as_posix().split('/'):
-                if prefix == '':
-                    continue
-                filename = filename.removeprefix(f'/{prefix}')
-            filename = filename.removeprefix('/')
+            filename = str(Path(self.media_file.path).relative_to(self.source.directory_path))
         else:
             filename = self.filename
         return os.path.splitext(filename)[0]
